@@ -6,7 +6,7 @@ class {{module_name}}Presenter {
     weak var displayable: {{module_name}}Displayable?
     weak var view:  {{module_name}}View?
 
-    init(interactorInput:{{module_name}InteractorInput}) {
+    init(interactorInput:{{module_name}}InteractorInput) {
         self.interactorInput = interactorInput
     }
 }

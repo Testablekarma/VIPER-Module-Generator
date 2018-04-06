@@ -5,7 +5,7 @@ class {{module_name}}Wireframe: {{module_name}}Navigable {
     func push(on navController: UINavigationController) {
 
         let interactor = {{module_name}}Interactor()
-        let presenter = {{module_name}}Presenter(interactorInput:interactor})
+        let presenter = {{module_name}}Presenter(interactorInput:interactor}
         let viewController = {{module_name}}ViewController(eventHandler:presenter)
 
         interactor.output = presenter
