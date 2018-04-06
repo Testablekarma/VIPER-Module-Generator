@@ -9,12 +9,9 @@
 import Cocoa
 
 enum ModuleFolderNames: String {
-    
-    case DataFolderName         = "Data"
     case LogicFolderName        = "Logic"
     case ModuleFolderName       = "Module"
     case UIFolderName           = "UI"
-    
 }
 
 enum ModuleFileNames: String {
@@ -34,7 +31,6 @@ enum ModuleFileNames: String {
 enum ModuleFolders {
     
     case defaultFolder(baseUrl: Foundation.URL, moduleName: String)
-    case dataFolder(Foundation.URL)
     case logicFolder(Foundation.URL)
     case moduleFolder(Foundation.URL)
     case uiFolder(Foundation.URL)
@@ -44,9 +40,6 @@ enum ModuleFolders {
             switch self {
             case .defaultFolder(let baseURL, let moduleName):
                 return baseURL.appendingPathComponent(moduleName)
-                
-            case .dataFolder(let baseURL):
-                return baseURL.appendingPathComponent(ModuleFolderNames.DataFolderName.rawValue)
             case .logicFolder(let baseURL):
                 return baseURL.appendingPathComponent(ModuleFolderNames.LogicFolderName.rawValue)
             case .moduleFolder(let baseURL):

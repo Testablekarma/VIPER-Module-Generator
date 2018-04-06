@@ -10,10 +10,6 @@ import Cocoa
 
 private enum ClassGeneratorKeys: String {
     case ModuleName         = "{{module_name}}"
-    case ProjectName        = "{{project_name}}"
-    case DeveloperName      = "{{developer_name}}"
-    case OrganizationName   = "{{organization_name}}"
-    case CurrentDate        = "{{current_date}}"
 }
 
 class ClassGenerator {
@@ -43,10 +39,6 @@ class ClassGenerator {
     
     fileprivate class func replaceModuleNames(_ text: inout String, model: ModuleModel) {
         text = text.replacingOccurrences(of: ClassGeneratorKeys.ModuleName.rawValue, with: model.moduleName)
-        text = text.replacingOccurrences(of: ClassGeneratorKeys.ProjectName.rawValue, with: model.projectName)
-        text = text.replacingOccurrences(of: ClassGeneratorKeys.DeveloperName.rawValue, with: model.developerName)
-        text = text.replacingOccurrences(of: ClassGeneratorKeys.OrganizationName.rawValue, with: model.organizationName)
-        text = text.replacingOccurrences(of: ClassGeneratorKeys.CurrentDate.rawValue, with: self.getCurrentDate())
     }
     
     fileprivate class func getCurrentDate() -> String {
