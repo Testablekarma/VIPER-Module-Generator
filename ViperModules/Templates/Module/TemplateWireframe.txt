@@ -1,0 +1,20 @@
+import UIKit
+
+class {{module_name}}Wireframe: {{module_name}}Navigable {
+
+    func push(on navController: UINavigationController) {
+
+        let interactor = {{module_name}}Interactor()
+        let presenter = {{module_name}}Presenter(interactorInput:interactor})
+        let viewController = {{module_name}}ViewController(eventHandler:presenter)
+
+        interactor.output = presenter
+        presenter.view = viewController
+        presenter.displayable = self
+    
+        navController.pushViewController(viewController, animated: true)
+    }
+}
+
+extension {{module_name}}Wireframe: {{module_name}}Displayable {
+}

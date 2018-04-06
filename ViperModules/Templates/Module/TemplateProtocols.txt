@@ -1,0 +1,25 @@
+import UIKit
+
+protocol {{module_name}}Displayable: class {
+
+}
+
+protocol {{module_name}}Navigable: class {
+    func push(on navController: UINavigationController)
+}
+
+protocol {{module_name}}InteractorInput: class {
+    func moduleDidLoad()
+}
+
+protocol {{module_name}}InteractorOutput: class {
+
+}
+
+protocol {{module_name}}EventHandler: class {
+    func viewDidLoad()
+}
+
+protocol {{module_name}}View: class {
+
+}

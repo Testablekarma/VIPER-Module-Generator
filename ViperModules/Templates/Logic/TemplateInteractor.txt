@@ -1,19 +1,14 @@
-//
-//  {{module_name}}Interactor.swift
-//  {{project_name}}
-//
-//  Created by {{developer_name}} on {{current_date}}.
-//  Copyright © {{organization_name}}. All rights reserved.
-//  VIPER Module Generator: https://github.com/jpachecou/VIPER-Module-Generator
+import Foundation
 
-import UIKit
+class {{module_name}}Interactor {
 
-protocol {{module_name}}InteractorInput {
+    weak var output: {{module_name}}InteractorOutput?
     
 }
 
-class {{module_name}}Interactor: {{module_name}}InteractorInput {
+extension {{module_name}}Interactor: {{module_name}}InteractorInput {
 
-    var output: {{module_name}}InteractorOutput?
-    
+    func moduleDidLoad() {
+
+    }
 }

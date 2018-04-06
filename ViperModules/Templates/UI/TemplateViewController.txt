@@ -1,0 +1,20 @@
+import UIKit
+
+class {{module_name}}ViewController: UIViewController, {{module_name}}UserInterface {
+
+    let eventHandler: {{module_name}}EventHandler
+
+    init(eventHandler:{{module_name}}) {
+        self.eventHandler = eventHandler
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.eventHandler.viewDidLoad()
+    }
+
+}
+
+protcol {{module_name}}ViewController: {{module_name}}View {
+
+}

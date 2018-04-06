@@ -1,0 +1,22 @@
+import Foundation
+
+class {{module_name}}Presenter {
+    
+    private let interactorInput: {{module_name}}InteractorInput
+    weak var displayable: {{module_name}}Displayable?
+    weak var view:  {{module_name}}View?
+
+    init(interactorInput:{{module_name}InteractorInput}) {
+        self.interactorInput = interactorInput
+    }
+}
+
+extension {{module_name}}Presenter: {{module_name}}EventHandler {
+    func viewDidLoad() {
+        self.interactorInput.moduleDidLoad()
+    }
+}
+
+extension {{module_name}}Presenter: {{module_name}}InteractorOutput {
+
+}
