@@ -42,7 +42,7 @@ class FilesManager {
             else { return }
         for url in enumerator {
             guard let url = url as? URL else { break }
-            let fileType = FilesManager.isPathDirectory(url.path ?? "")
+            let fileType = FilesManager.isPathDirectory(url.path)
             let fileName: String? = (fileType == .file ? params.model.moduleName : nil)
             if let fileUrl = self.getNewUrlWithBase(baseUrl, template: url, fileName: fileName) {
                 print(fileUrl)
@@ -59,8 +59,7 @@ class FilesManager {
     }
     
     fileprivate func createFolder(_ url: URL) {
-        guard let path = url.path else { return }
-        
+        let path = url.path
         let fileManager = FileManager.default
         if !fileManager.fileExists(atPath: path) {
             do {
@@ -70,18 +69,18 @@ class FilesManager {
     }
 
     fileprivate func getNewUrlWithBase(_ base: URL, template: URL, fileName: String?) -> URL? {
-        guard let templateBasePath = self.templatePath.path else { return nil }
-        guard let templatePath = template.path else { return nil }
+        let templateBasePath = self.templatePath.path
+        let templatePath = template.path
         let range = (templateBasePath.endIndex ..< templatePath.endIndex)
         let newPath = templatePath[range]
         let newUrl = base.appendingPathComponent(newPath)
         
         if let fileName = fileName {
-            guard var lastPathComponent = newUrl.lastPathComponent else { return newUrl }
+            var lastPathComponent = newUrl.lastPathComponent
             lastPathComponent = lastPathComponent.replacingOccurrences(of: "Template", with: fileName)
             lastPathComponent = (lastPathComponent as NSString).deletingPathExtension
             lastPathComponent += ".swift"
-            return newUrl.deletingLastPathComponent()?.appendingPathComponent(lastPathComponent)
+            return newUrl.deletingLastPathComponent().appendingPathComponent(lastPathComponent)
         }
         
         return newUrl
@@ -107,7 +106,7 @@ class FilesManager {
 extension FilesManager {
     
     func showResults(_ baseUrl: URL) {
-        guard let path = (baseUrl.path) + "/" else { return }
+        let path = (baseUrl.path) + "/"
         NSWorkspace.shared().selectFile(nil, inFileViewerRootedAtPath: path)
     }
     

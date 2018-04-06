@@ -24,8 +24,8 @@ class ClassGenerator {
     
     fileprivate class func generateFile(_ templateUrl: URL, urlFile: URL, model: ModuleModel) {
         self.createFile(urlFile)
-        guard let path = urlFile.path else { return }
-        guard let templatePath = templateUrl.path else { return }
+        let path = urlFile.path
+        let templatePath = templateUrl.path
         if var text = self.readFileTemplate(templatePath) {
             self.replaceModuleNames(&text, model: model)
             self.writeFile(path, text: text)
@@ -33,7 +33,7 @@ class ClassGenerator {
     }
     
     fileprivate class func createFile(_ url: URL) {
-        guard let path = url.path else { return }
+        let path = url.path
         
         let fileManager = FileManager.default
         if !fileManager.fileExists(atPath: path) {

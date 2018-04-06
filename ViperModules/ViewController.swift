@@ -15,11 +15,11 @@ class ViewController: NSViewController {
     @IBOutlet weak var developerNameCell:       NSFormCell!
     @IBOutlet weak var organizationNameCell:    NSFormCell!
 
-    override var representedObject: AnyObject? {
-        didSet {
-        // Update the view, if already loaded.
-        }
-    }
+//    override var representedObject: AnyObject? {
+//        didSet {
+//        // Update the view, if already loaded.
+//        }
+//    }
     
     @IBAction func generateModule(_ sender: AnyObject) {
         let model = ModuleModel().then {
