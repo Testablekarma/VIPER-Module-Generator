@@ -24,9 +24,6 @@ class ViewController: NSViewController {
     @IBAction func generateModule(_ sender: AnyObject) {
         let model = ModuleModel().then {
             $0.moduleName           = self.moduleNameCell.stringValue
-            $0.projectName          = self.projectNameCell.stringValue
-            $0.developerName        = self.developerNameCell.stringValue
-            $0.organizationName     = self.organizationNameCell.stringValue
         }
         let filesManager = FilesManager(moduleModel: model)
         filesManager.generateModule()
