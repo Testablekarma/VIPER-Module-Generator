@@ -18,11 +18,11 @@ private enum ClassGeneratorKeys: String {
 
 class ClassGenerator {
 
-    class func generateClass(fileUrl: NSURL, templateUrl: NSURL, model: ModuleModel) {
+    class func generateClass(_ fileUrl: URL, templateUrl: URL, model: ModuleModel) {
         self.generateFile(templateUrl, urlFile: fileUrl, model: model)
     }
     
-    private class func generateFile(templateUrl: NSURL, urlFile: NSURL, model: ModuleModel) {
+    fileprivate class func generateFile(_ templateUrl: URL, urlFile: URL, model: ModuleModel) {
         self.createFile(urlFile)
         guard let path = urlFile.path else { return }
         guard let templatePath = templateUrl.path else { return }
@@ -32,38 +32,38 @@ class ClassGenerator {
         }
     }
     
-    private class func createFile(url: NSURL) {
+    fileprivate class func createFile(_ url: URL) {
         guard let path = url.path else { return }
         
-        let fileManager = NSFileManager.defaultManager()
-        if !fileManager.fileExistsAtPath(path) {
-            fileManager.createFileAtPath(path, contents: nil, attributes: nil)
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: path) {
+            fileManager.createFile(atPath: path, contents: nil, attributes: nil)
         }
     }
     
-    private class func replaceModuleNames(inout text: String, model: ModuleModel) {
-        text = text.stringByReplacingOccurrencesOfString(ClassGeneratorKeys.ModuleName.rawValue, withString: model.moduleName)
-        text = text.stringByReplacingOccurrencesOfString(ClassGeneratorKeys.ProjectName.rawValue, withString: model.projectName)
-        text = text.stringByReplacingOccurrencesOfString(ClassGeneratorKeys.DeveloperName.rawValue, withString: model.developerName)
-        text = text.stringByReplacingOccurrencesOfString(ClassGeneratorKeys.OrganizationName.rawValue, withString: model.organizationName)
-        text = text.stringByReplacingOccurrencesOfString(ClassGeneratorKeys.CurrentDate.rawValue, withString: self.getCurrentDate())
+    fileprivate class func replaceModuleNames(_ text: inout String, model: ModuleModel) {
+        text = text.replacingOccurrences(of: ClassGeneratorKeys.ModuleName.rawValue, with: model.moduleName)
+        text = text.replacingOccurrences(of: ClassGeneratorKeys.ProjectName.rawValue, with: model.projectName)
+        text = text.replacingOccurrences(of: ClassGeneratorKeys.DeveloperName.rawValue, with: model.developerName)
+        text = text.replacingOccurrences(of: ClassGeneratorKeys.OrganizationName.rawValue, with: model.organizationName)
+        text = text.replacingOccurrences(of: ClassGeneratorKeys.CurrentDate.rawValue, with: self.getCurrentDate())
     }
     
-    private class func getCurrentDate() -> String {
-        let formatter = NSDateFormatter()
+    fileprivate class func getCurrentDate() -> String {
+        let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yy"
-        return formatter.stringFromDate(NSDate())
+        return formatter.string(from: Date())
     }
     
-    private class func readFileTemplate(path: String) -> String? {
+    fileprivate class func readFileTemplate(_ path: String) -> String? {
         do {
-            return try NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding).description
+            return try NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue).description
         } catch { return nil }
     }
     
-    private class func writeFile(path: String, text: String) {
+    fileprivate class func writeFile(_ path: String, text: String) {
         do {
-            try text.writeToFile(path, atomically: false, encoding: NSUTF8StringEncoding)
+            try text.write(toFile: path, atomically: false, encoding: String.Encoding.utf8)
         } catch {}
     }
 }

@@ -21,7 +21,7 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBAction func generateModule(sender: AnyObject) {
+    @IBAction func generateModule(_ sender: AnyObject) {
         let model = ModuleModel().then {
             $0.moduleName           = self.moduleNameCell.stringValue
             $0.projectName          = self.projectNameCell.stringValue

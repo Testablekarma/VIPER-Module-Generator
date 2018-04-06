@@ -31,47 +31,47 @@ enum ModuleFileNames: String {
     case ViewControllerFileName = "ViewController"
     
     var nameWithExtension: String {
-        get { return self.rawValue.stringByAppendingString(".swift") }
+        get { return self.rawValue + ".swift" }
     }
     
 }
 
 enum ModuleFolders {
     
-    case DefaultFolder(baseUrl: NSURL, moduleName: String)
-    case DataFolder(NSURL)
-    case LogicFolder(NSURL)
-    case ModuleFolder(NSURL)
-    case UIFolder(NSURL)
+    case defaultFolder(baseUrl: Foundation.URL, moduleName: String)
+    case dataFolder(Foundation.URL)
+    case logicFolder(Foundation.URL)
+    case moduleFolder(Foundation.URL)
+    case uiFolder(Foundation.URL)
     
-    indirect case PresenterFolder(ModuleFolders)
-    indirect case ViewsFolder(ModuleFolders)
-    indirect case RoutingFolder(ModuleFolders)
-    indirect case ControllersFolder(ModuleFolders)
+    indirect case presenterFolder(ModuleFolders)
+    indirect case viewsFolder(ModuleFolders)
+    indirect case routingFolder(ModuleFolders)
+    indirect case controllersFolder(ModuleFolders)
 
-    var URL: NSURL {
+    var URL: Foundation.URL {
         get {
             switch self {
-            case DefaultFolder(let baseURL, let moduleName):
-                return baseURL.URLByAppendingPathComponent(moduleName)
+            case .defaultFolder(let baseURL, let moduleName):
+                return baseURL.appendingPathComponent(moduleName)
                 
-            case .DataFolder(let baseURL):
-                return baseURL.URLByAppendingPathComponent(ModuleFolderNames.DataFolderName.rawValue)
-            case .LogicFolder(let baseURL):
-                return baseURL.URLByAppendingPathComponent(ModuleFolderNames.LogicFolderName.rawValue)
-            case .ModuleFolder(let baseURL):
-                return baseURL.URLByAppendingPathComponent(ModuleFolderNames.ModuleFolderName.rawValue)
-            case .UIFolder(let baseURL):
-                return baseURL.URLByAppendingPathComponent(ModuleFolderNames.UIFolderName.rawValue)
+            case .dataFolder(let baseURL):
+                return baseURL.appendingPathComponent(ModuleFolderNames.DataFolderName.rawValue)
+            case .logicFolder(let baseURL):
+                return baseURL.appendingPathComponent(ModuleFolderNames.LogicFolderName.rawValue)
+            case .moduleFolder(let baseURL):
+                return baseURL.appendingPathComponent(ModuleFolderNames.ModuleFolderName.rawValue)
+            case .uiFolder(let baseURL):
+                return baseURL.appendingPathComponent(ModuleFolderNames.UIFolderName.rawValue)
                 
-            case .PresenterFolder(let parentFolder):
-                return parentFolder.URL.URLByAppendingPathComponent(ModuleFolderNames.PresenterFolderName.rawValue)
-            case .ViewsFolder(let parentFolder):
-                return parentFolder.URL.URLByAppendingPathComponent(ModuleFolderNames.ViewsFolderName.rawValue)
-            case .RoutingFolder(let parentFolder):
-                return parentFolder.URL.URLByAppendingPathComponent(ModuleFolderNames.RoutingFolderName.rawValue)
-            case .ControllersFolder(let parentFolder):
-                return parentFolder.URL.URLByAppendingPathComponent(ModuleFolderNames.ControllerFolderName.rawValue)
+            case .presenterFolder(let parentFolder):
+                return parentFolder.URL.appendingPathComponent(ModuleFolderNames.PresenterFolderName.rawValue)
+            case .viewsFolder(let parentFolder):
+                return parentFolder.URL.appendingPathComponent(ModuleFolderNames.ViewsFolderName.rawValue)
+            case .routingFolder(let parentFolder):
+                return parentFolder.URL.appendingPathComponent(ModuleFolderNames.RoutingFolderName.rawValue)
+            case .controllersFolder(let parentFolder):
+                return parentFolder.URL.appendingPathComponent(ModuleFolderNames.ControllerFolderName.rawValue)
             }
         }
     }
@@ -80,43 +80,43 @@ enum ModuleFolders {
 
 enum ModuleFiles {
     
-    case ModelFile(baseURL: NSURL, module: ModuleModel)
-    case InteractorFile(baseURL: NSURL, module: ModuleModel)
-    case ModuleFile(baseURL: NSURL, module: ModuleModel)
-    case PresenterFile(baseURL: NSURL, module: ModuleModel)
-    case ViewControllerFile(baseURL: NSURL, module: ModuleModel)
-    case WireframeFile(baseURL: NSURL, module: ModuleModel)
+    case modelFile(baseURL: Foundation.URL, module: ModuleModel)
+    case interactorFile(baseURL: Foundation.URL, module: ModuleModel)
+    case moduleFile(baseURL: Foundation.URL, module: ModuleModel)
+    case presenterFile(baseURL: Foundation.URL, module: ModuleModel)
+    case viewControllerFile(baseURL: Foundation.URL, module: ModuleModel)
+    case wireframeFile(baseURL: Foundation.URL, module: ModuleModel)
     
-    var URL: NSURL {
+    var URL: Foundation.URL {
         get {
             switch self {
-            case .ModelFile(let baseURL, let module):
+            case .modelFile(let baseURL, let module):
                 let fileName = ModuleFileNames.ModelFileName.nameWithExtension
-                return ModuleFolders.DataFolder(baseURL).URL.URLByAppendingPathComponent("\(module.moduleName)\(fileName)")
+                return ModuleFolders.dataFolder(baseURL).URL.appendingPathComponent("\(module.moduleName)\(fileName)")
                 
-            case .InteractorFile(let baseURL, let module):
+            case .interactorFile(let baseURL, let module):
                 let fileName = ModuleFileNames.InteractorFileName.nameWithExtension
-                return ModuleFolders.LogicFolder(baseURL).URL.URLByAppendingPathComponent("\(module.moduleName)\(fileName)")
+                return ModuleFolders.logicFolder(baseURL).URL.appendingPathComponent("\(module.moduleName)\(fileName)")
                 
-            case .ModuleFile(let baseURL, let module):
+            case .moduleFile(let baseURL, let module):
                 let fileName = ModuleFileNames.ModuleFileName.nameWithExtension
-                return ModuleFolders.ModuleFolder(baseURL).URL.URLByAppendingPathComponent("\(module.moduleName)\(fileName)")
+                return ModuleFolders.moduleFolder(baseURL).URL.appendingPathComponent("\(module.moduleName)\(fileName)")
                 
-            case .PresenterFile(let baseURL, let module):
-                let UIFolder = ModuleFolders.UIFolder(baseURL)
+            case .presenterFile(let baseURL, let module):
+                let UIFolder = ModuleFolders.uiFolder(baseURL)
                 let fileName = ModuleFileNames.PresenterFileName.nameWithExtension
-                return ModuleFolders.PresenterFolder(UIFolder).URL.URLByAppendingPathComponent("\(module.moduleName)\(fileName)")
+                return ModuleFolders.presenterFolder(UIFolder).URL.appendingPathComponent("\(module.moduleName)\(fileName)")
                 
-            case .ViewControllerFile(let baseURL, let module):
-                let UIFolder = ModuleFolders.UIFolder(baseURL)
-                let viewFolder = ModuleFolders.ViewsFolder(UIFolder)
+            case .viewControllerFile(let baseURL, let module):
+                let UIFolder = ModuleFolders.uiFolder(baseURL)
+                let viewFolder = ModuleFolders.viewsFolder(UIFolder)
                 let fileName = ModuleFileNames.WireframeFileName.nameWithExtension
-                return ModuleFolders.ControllersFolder(viewFolder).URL.URLByAppendingPathComponent("\(module.moduleName)\(fileName)")
+                return ModuleFolders.controllersFolder(viewFolder).URL.appendingPathComponent("\(module.moduleName)\(fileName)")
                 
-            case .WireframeFile(let baseURL, let module):
-                let UIFolder = ModuleFolders.UIFolder(baseURL)
+            case .wireframeFile(let baseURL, let module):
+                let UIFolder = ModuleFolders.uiFolder(baseURL)
                 let fileName = ModuleFileNames.ViewControllerFileName.nameWithExtension
-                return ModuleFolders.ViewsFolder(UIFolder).URL.URLByAppendingPathComponent("\(module.moduleName)\(fileName)")
+                return ModuleFolders.viewsFolder(UIFolder).URL.appendingPathComponent("\(module.moduleName)\(fileName)")
 
             }
         }

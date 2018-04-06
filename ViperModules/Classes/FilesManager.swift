@@ -9,17 +9,17 @@
 import Cocoa
 
 enum FilesManagerType {
-    case File
-    case Folder
-    case Invalid
+    case file
+    case folder
+    case invalid
 }
 
 class FilesManager {
     
     var moduleModel: ModuleModel
-    private var baseURL: String?
-    private var templatePath: NSURL! {
-        get { return NSBundle.mainBundle().URLForResource("Templates", withExtension: nil)! }
+    fileprivate var baseURL: String?
+    fileprivate var templatePath: URL! {
+        get { return Bundle.main.url(forResource: "Templates", withExtension: nil)! }
     }
     
     init(moduleModel: ModuleModel) {
@@ -33,23 +33,23 @@ class FilesManager {
         }
     }
     
-    private func createFolders(params: (baseUrl: NSURL?, model: ModuleModel)) {
-        guard let baseUrl = params.baseUrl?.URLByAppendingPathComponent(params.model.moduleName) else { return }
+    fileprivate func createFolders(_ params: (baseUrl: URL?, model: ModuleModel)) {
+        guard let baseUrl = params.baseUrl?.appendingPathComponent(params.model.moduleName) else { return }
         self.createFolder(baseUrl)
-        guard let enumerator = NSFileManager.defaultManager().enumeratorAtURL(self.templatePath,
-            includingPropertiesForKeys: [NSURLIsDirectoryKey],
-            options: NSDirectoryEnumerationOptions.init(rawValue: 0), errorHandler:  { _, _ in return true })
+        guard let enumerator = FileManager.default.enumerator(at: self.templatePath,
+            includingPropertiesForKeys: [URLResourceKey.isDirectoryKey],
+            options: FileManager.DirectoryEnumerationOptions.init(rawValue: 0), errorHandler:  { _, _ in return true })
             else { return }
         for url in enumerator {
-            guard let url = url as? NSURL else { break }
+            guard let url = url as? URL else { break }
             let fileType = FilesManager.isPathDirectory(url.path ?? "")
-            let fileName: String? = (fileType == .File ? params.model.moduleName : nil)
+            let fileName: String? = (fileType == .file ? params.model.moduleName : nil)
             if let fileUrl = self.getNewUrlWithBase(baseUrl, template: url, fileName: fileName) {
                 print(fileUrl)
                 switch fileType {
-                case .Folder:
+                case .folder:
                     self.createFolder(fileUrl)
-                case .File:
+                case .file:
                     ClassGenerator.generateClass(fileUrl, templateUrl: url, model: params.model)
                 default: break
                 }
@@ -58,44 +58,44 @@ class FilesManager {
         self.showResults(baseUrl)
     }
     
-    private func createFolder(url: NSURL) {
+    fileprivate func createFolder(_ url: URL) {
         guard let path = url.path else { return }
         
-        let fileManager = NSFileManager.defaultManager()
-        if !fileManager.fileExistsAtPath(path) {
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: path) {
             do {
-                try fileManager.createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil)
+                try fileManager.createDirectory(atPath: path, withIntermediateDirectories: false, attributes: nil)
             } catch {}
         }
     }
 
-    private func getNewUrlWithBase(base: NSURL, template: NSURL, fileName: String?) -> NSURL? {
+    fileprivate func getNewUrlWithBase(_ base: URL, template: URL, fileName: String?) -> URL? {
         guard let templateBasePath = self.templatePath.path else { return nil }
         guard let templatePath = template.path else { return nil }
-        let range = Range<String.Index>(start: templateBasePath.endIndex, end: templatePath.endIndex)
+        let range = (templateBasePath.endIndex ..< templatePath.endIndex)
         let newPath = templatePath[range]
-        let newUrl = base.URLByAppendingPathComponent(newPath)
+        let newUrl = base.appendingPathComponent(newPath)
         
         if let fileName = fileName {
             guard var lastPathComponent = newUrl.lastPathComponent else { return newUrl }
-            lastPathComponent = lastPathComponent.stringByReplacingOccurrencesOfString("Template", withString: fileName)
-            lastPathComponent = (lastPathComponent as NSString).stringByDeletingPathExtension
+            lastPathComponent = lastPathComponent.replacingOccurrences(of: "Template", with: fileName)
+            lastPathComponent = (lastPathComponent as NSString).deletingPathExtension
             lastPathComponent += ".swift"
-            return newUrl.URLByDeletingLastPathComponent?.URLByAppendingPathComponent(lastPathComponent)
+            return newUrl.deletingLastPathComponent()?.appendingPathComponent(lastPathComponent)
         }
         
         return newUrl
     }
     
-    private func loadBaseFolder(callback: (path: NSURL) -> Void) {
+    fileprivate func loadBaseFolder(_ callback: @escaping (_ path: URL) -> Void) {
         let panel = NSOpenPanel()
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.canCreateDirectories = true
-        panel.beginWithCompletionHandler { result in
+        panel.begin { result in
             if result == NSFileHandlingPanelOKButton {
-                if let theDoc = panel.URLs.first {
-                    callback(path: theDoc)
+                if let theDoc = panel.urls.first {
+                    callback(theDoc)
                 }
             }
         }
@@ -106,16 +106,16 @@ class FilesManager {
 
 extension FilesManager {
     
-    func showResults(baseUrl: NSURL) {
-        guard let path = baseUrl.path?.stringByAppendingString("/") else { return }
-        NSWorkspace.sharedWorkspace().selectFile(nil, inFileViewerRootedAtPath: path)
+    func showResults(_ baseUrl: URL) {
+        guard let path = (baseUrl.path) + "/" else { return }
+        NSWorkspace.shared().selectFile(nil, inFileViewerRootedAtPath: path)
     }
     
-    class func isPathDirectory(path: String) -> FilesManagerType {
+    class func isPathDirectory(_ path: String) -> FilesManagerType {
         var isDirectory: ObjCBool = ObjCBool(false)
-        if NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDirectory) {
-            return isDirectory.boolValue ? .Folder : .File
+        if FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) {
+            return isDirectory.boolValue ? .folder : .file
         }
-        return .Invalid
+        return .invalid
     }
 }

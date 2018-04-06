@@ -15,8 +15,8 @@ class ModuleModel {
     var developerName = ""
     var organizationName = ""
     
-    func then(selfModel: (model: ModuleModel) -> Void) -> ModuleModel {
-        selfModel(model: self)
+    func then(_ selfModel: (_ model: ModuleModel) -> Void) -> ModuleModel {
+        selfModel(self)
         return self
     }
     
