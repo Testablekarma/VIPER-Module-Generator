@@ -1,6 +1,11 @@
 import UIKit
+import Swinject
 
 class {{module_name}}Wireframe: {{module_name}}Navigable {
+
+    init(container: Container) {
+
+    }
 
     func push(on navController: UINavigationController) {
 
