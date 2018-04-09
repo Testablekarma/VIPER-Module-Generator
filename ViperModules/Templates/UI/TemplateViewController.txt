@@ -2,7 +2,7 @@ import UIKit
 
 class {{module_name}}ViewController: UIViewController {
 
-    let eventHandler: {{module_name}}EventHandler
+    private let eventHandler: {{module_name}}EventHandler
 
     init(eventHandler:{{module_name}}EventHandler) {
         self.eventHandler = eventHandler
